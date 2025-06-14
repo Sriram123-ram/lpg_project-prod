@@ -20,7 +20,6 @@ def home():
             <p>
                 Generate Your digital posts in just 5 mins!
             </p>
-            <a herf="mailto:tharunkumarpotluri@gmail.com>The work is inprogress</a>
             <a herf="mailto:tharunkumarpotluri@gmail.com">The work is inprogress</a>
         </body>
 
