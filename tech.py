@@ -1,27 +1,42 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from supabase import create_client, Client
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 
+# Supabase credentials
+supabase_url = "https://dmrmooovmshrxfjlmpgg.supabase.co"
+supabase_api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtcm1vb292bXNocnhmamxtcGdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5Njc5MDUsImV4cCI6MjA2NTU0MzkwNX0.3m5dYlHWN8xolLEnWhbAnud0R0QslykMIl-FHsR54XM"
 
-@app.get("/",response_class=HTMLResponse)
+# Create Supabase client
+database: Client = create_client(supabase_url, supabase_api_key)
+
+@app.get("/", response_class=HTMLResponse)
 def home():
-    return """
-      <!DOCTYPE html>
-        <html>
+    return "<h1>LinkedIn Post Generator API</h1>"
 
-        <head>
-            <title>𝐋𝐈𝐍𝐊𝐄𝐃𝐈𝐍 𝐏𝐎𝐒𝐓 𝐆𝐄𝐍𝐄𝐑𝐀𝐓𝐎𝐑</title>
-        </head>
+@app.get("/all-data")
+def get_all_data():
+    users = database.table('users_table').select("*").execute().data
+    posts = database.table('posts_table').select("*").execute().data
+    tones = database.table('tones_table').select("*").execute().data
+    hashtags = database.table('hashtags').select("*").execute().data
+    preferences = database.table('preferences').select("*").execute().data
 
-        <body>
-            <h2>Welcome To 𝐋𝐈𝐍𝐊𝐄𝐃𝐈𝐍 𝐏𝐎𝐒𝐓 𝐆𝐄𝐍𝐄𝐑𝐀𝐓𝐎𝐑</h2>
-            <p>
-                Generate Your digital posts in just 5 mins!
-            </p>
-            <a href="mailto:tharunkumarpotluri@gmail.com">The work is inprogress</a>
-        </body>
+    return {
+        "users_table": users,
+        "posts_table": posts,
+        "tones_table": tones,
+        "hashtags": hashtags,
+        "preferences": preferences
+    }
 
-        </html>
-    """
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
