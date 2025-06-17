@@ -15,7 +15,23 @@ database: Client = create_client(supabase_url, supabase_api_key)
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-    return "<h1>LinkedIn Post Generator API</h1>"
+    return """
+    <!DOCTYPE html>
+<html>
+ 
+<head>
+    <title>LinkedIn Post Generator</title>
+</head>
+ 
+<body>
+    <h2>LinkedIn Post Generator</h2>
+    <p>
+        Default code has been
+        loaded into the Editor.
+    </p>
+</body>
+</html>
+"""
 
 @app.get("/all-data")
 def get_all_data():
